@@ -1,0 +1,15 @@
+from collections import deque
+
+a=deque([])
+b=deque([])
+deque.append(a,10)
+deque.append(a,20)
+deque.append(a,30)
+deque.append(a,40)
+print(a)
+print(deque.pop(a))
+print(a)
+deque.reverse(a)
+print(a)
+print(deque.popleft(a))
+print(a)
