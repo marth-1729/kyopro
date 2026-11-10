@@ -1,7 +1,15 @@
 from collections import defaultdict, deque
+import math
 
+"""
+link : https://github.com/marth-1729/kyopro/blob/main/LCA.py
+ここのコードを改変・コピペで使用．
+"""
 
-# https://atcoder.jp/contests/abc478/standings
+# 2026/11/10 多少改良．
+# 旧バージョンは，https://atcoder.jp/contests/abc014/submissions/80747068
+# https://atcoder.jp/contests/abc014/tasks/abc014_4
+#  -> ACコード：https://atcoder.jp/contests/abc014/submissions/80748086
 # この問題はCPythonじゃないと通らなかった．(メモリ不足)
 # PyPyでもTLEが怖い......
 # 因みにLCA使わないけど，以下の問題では2*10 ^ 5 でもTLE
@@ -16,7 +24,7 @@ class LCA:
     """
 
     def __init__(self, root, N):
-        self.nn = 18        # TLE 回避用．
+        self.nn = 21        # TLE 回避用．
         self.ancient = [[0 for _ in range(N + 1)] for _ in range(self.nn + 1)]
         self.depth = [0] * (N + 1)
         ls = deque([(root, 0)])
@@ -51,45 +59,35 @@ class LCA:
                 ls.append(next)
                 fin.add(next)
 
+
     def calc(self, u, v):
         ans = 0
         if self.depth[u] < self.depth[v]:
             u, v = v, u
+        if self.depth[u] == 0:
+            return (ans, u)
 
-        cur = 0
-        num = 1
-        while self.depth[u] > self.depth[v]:
-            # print(u, v, ans, cur)
-            if self.depth[u] - self.depth[v] >= 2 * num:
-                cur += 1
-                num *= 2
-                continue
-            elif self.depth[u] - self.depth[v] > num:
-                u = self.ancient[cur][u]
+        M = int(math.log2(self.depth[u])) + 1
+        num = 2 ** M
+        for k in range(M, -1, -1):
+            if self.depth[u] - self.depth[v] >= num:
+                u = self.ancient[k][u]
                 ans += num
-                cur = 0
-                num = 1
-            elif self.depth[u] - self.depth[v] == num:
-                u = self.ancient[cur][u]
-                ans += num
+            elif self.depth[u] - self.depth[v] == 0:
                 break
-
+            num //= 2
 
         if u == v:
             return (ans, v)
 
-        while self.ancient[0][u] != self.ancient[0][v]:
-            cur = 0
-            while True:
-                if self.ancient[cur + 1][u] == self.ancient[cur + 1][v] or self.depth[u] < 2 ** (cur + 1):
-                    u = self.ancient[cur][u]
-                    v = self.ancient[cur][v]
-                    ans += 2 ** (cur + 1)
-                    break
-                cur += 1
+        M = int(math.log2(self.depth[u])) + 1
+        for k in range(M, -1, -1):
+            if self.ancient[k][u] != self.ancient[k][v]:
+                u = self.ancient[k][u]
+                v = self.ancient[k][v]
+                ans += 2 ** (k + 1)
 
         return (ans + 2, self.ancient[0][u])
-
 
 N = int(input())
 edges = defaultdict(list)
