@@ -1,5 +1,10 @@
 from atcoder import string
 
+"""
+link : https://github.com/marth-1729/kyopro/blob/main/acl_string.py
+ここのコードを改変・コピペで使用．
+"""
+
 S = input()
 """
 suffix array:
@@ -41,4 +46,11 @@ S = "abacb" のとき，
 """
 print(string.lcp_array(S, sa))
 
-# 他にもz-アルゴリズムというのがあるらしいけど，よくわかってない．
+# 他にもz-アルゴリズムというのがあるらしいけど，よくわかってない．(内部はよくわからんけど，返す値は簡単)
+"""
+z_algorithm
+・input  : 長さnの文字列 S
+・output : 長さnの配列，
+        SとS[i:]のLCPを返す．
+"""
+print(string.z_algorithm(S))
