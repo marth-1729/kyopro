@@ -1,13 +1,20 @@
+"""
+link : https://github.com/marth-1729/kyopro/blob/main/fenwick_tree.py
+ここのコードを改変・コピペで使用．
+"""
+
 # 引用：https://qiita.com/AkariLuminous/items/f2f7930e7f67963f0493
 
 """
-できることはSeg木とほぼ同じ．
+Fenwick Tree
+
+できることはSeg木とほぼ同じ．こっちの方が計算が軽いので，普段使いはこっちが増えそう．
 一点更新  ：O(log N)
 区間クエリ：O(log N)
 
 考え方は累積和と近い．
 
-コメント：ACLのFenwick_Treeだと，加法しかできないので，多作のライブラリをもらう．
+コメント：ACLのFenwick Treeだと，加法しかできないので，多作のライブラリをもらう．
         のちのちは，他の演算や二次元のものも勉強したい．(わかりやすいサイトとかないかな......)
 """
 class Fenwick_Tree:
