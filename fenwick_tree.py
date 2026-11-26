@@ -46,22 +46,11 @@ class Fenwick_Tree:
         if self.func == "sum":
             assert 0 <= p < self.n
             self.add(p, x - self.data[p])
-            # p += 1
-            # while p <= self._n:
-            #     self.data[p - 1] += x
-            #     p += p & -p
+
         elif self.func == "xor":
             assert 0 <= p < self.n
             self.add(p, x ^ self.data[p])
-            # pp = p + 1
-            # pre = self.date[p]
-            # while p <= self._n:
-            #     self.data[p - 1] -= pre
-            #     pp += pp & -pp
-            # p += 1
-            # while p <= self._n:
-            #     self.data[p - 1] ^= x
-            #     p += p & -p
+
 
     def query(self, l, r):
         if self.func == "sum":
@@ -142,4 +131,3 @@ print(fw.bisect_r(4, 4))
 fw.add(1, 3)
 print(fw.data)
 print(fw.query(1, 3))
-
