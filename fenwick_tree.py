@@ -18,13 +18,16 @@ Fenwick Tree
 
 コメント：ACLのFenwick Treeだと，加法しかできないので，多作のライブラリをもらう．
         のちのちは，他の演算や二次元のものも勉強したい．(わかりやすいサイトとかないかな......)
+
+## bisectは修正中......どこが違うの？
 """
 class Fenwick_Tree:
     # 今のところは，sumとxorのみ．
     def __init__(self, A, func = "sum"):
         self.n = len(A)
-        self.data = [0] * self.n
+        self.data = [0] * (self.n + 1)
         self.func = func
+        self.max_bit = 1 << (self.n.bit_length() - 1) if self.n > 0 else 0
         for i in range(self.n):
             self.add(i, A[i])
 
@@ -83,32 +86,18 @@ class Fenwick_Tree:
     def get(self, i):
         return self.sum(i, i + 1)
 
-    def bisect_l(self, l, K):
-        # \sum_{k = l} ^ {p} x_{k} >= K を満たす最小のpを返す．
-        left = l; right = self.n + 1
-        s = self._sum(l)
-        while left < right:
-            X = (left + right) // 2
-            cur = self._sum(X + 1) - s
-            if K > cur:
-                left = X + 1
-            else:
-                right = X
-        return left
-
-    def bisect_r(self, r, K):
-        # \sum_{k = p} ^ {N - 1}  x_{k} >= X を満たす最大のpを返す．
-        left = -1; right = r
-        s = self._sum(r + 1)
-        while left < right:
-            X = (left + right + 1) // 2
-            cur = s - self._sum(X)
-            if K <= cur:
-                left = X
-            else:
-                right = X - 1
-        return left
-
+    def bisect_l(self, K):
+        if K <= 0:
+            return -1, 0
+        idx = 0
+        step = self.max_bit
+        a = 0
+        while step > 0:
+            if idx + step <= self.n and self.data[idx + step] < K:
+                K -= self.data[idx + step]
+                idx += step
+            step >>= 1
+        return idx, a
 
 # 使用例1
 n = 8
@@ -127,7 +116,7 @@ a = [0, 1, 2, 3, 4, 5, 6, 7]
 fw = Fenwick_Tree(a, "sum")
 print(fw.query(1, 3))
 print(fw._sum(5))
-print(fw.bisect_r(4, 4))
+print(fw.bisect_l(4))
 fw.add(1, 3)
 print(fw.data)
 print(fw.query(1, 3))
